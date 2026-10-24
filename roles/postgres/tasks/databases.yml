@@ -1,0 +1,20 @@
+---
+- name: create PostgreSQL users
+  community.postgresql.postgresql_user:
+    name: "{{item.name}}"
+    password: "{{item.password}}"
+    state: present
+    login_unix_socket: /var/run/postgresql
+  loop: "{{postgres__users}}"
+  become: true
+  become_user: postgres
+  no_log: true
+
+- name: create PostgreSQL databases
+  community.postgresql.postgresql_db:
+    name: "{{item.name}}"
+    state: present
+    login_unix_socket: /var/run/postgresql
+  loop: "{{postgres__databases}}"
+  become: true
+  become_user: postgres

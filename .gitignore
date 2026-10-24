@@ -1,0 +1,18 @@
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+ansible-hw/
+
+# ansible
+*.retry
+.vault_pass
+.vault_password
+vault-password.txt
+
+# temporary files
+*.swp
+*.swo
+*~
+.DS_Store

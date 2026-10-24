@@ -1,0 +1,32 @@
+---
+- name: install PostgreSQL exporter
+  ansible.builtin.apt:
+    name: "{{postgres__exporter_package}}"
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+- name: create PostgreSQL monitoring user
+  community.postgresql.postgresql_user:
+    name: "{{postgres__exporter_user}}"
+    role_attr_flags: LOGIN
+    state: present
+  become_user: postgres
+- name: grant monitoring permissions
+  community.postgresql.postgresql_membership:
+    group: pg_monitor
+    target_roles:
+      - "{{postgres__exporter_user}}"
+    state: present
+  become_user: postgres
+- name: configure PostgreSQL exporter connection
+  ansible.builtin.lineinfile:
+    path: /etc/default/prometheus-postgres-exporter
+    regexp: '^DATA_SOURCE_NAME='
+    line: "DATA_SOURCE_NAME='user={{postgres__exporter_user}} host=/var/run/postgresql dbname=postgres'"
+    state: present
+  notify: restart PostgreSQL exporter
+- name: enable and start PostgreSQL exporter
+  ansible.builtin.systemd:
+    name: "{{__pg_exporter_service_name}}"
+    enabled: true
+    state: started

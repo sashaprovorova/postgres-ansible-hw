@@ -1,0 +1,22 @@
+---
+- name: install PostgreSQL common package
+  ansible.builtin.apt:
+    name: postgresql-common
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: disable automatic default cluster creation
+  ansible.builtin.lineinfile:
+    path: /etc/postgresql-common/createcluster.conf
+    regexp: '^\s*#?\s*create_main_cluster\s*='
+    line: 'create_main_cluster = false'
+    state: present
+
+- name: install PostgreSQL packages
+  ansible.builtin.apt:
+    name:
+      - "postgresql-{{ postgres__version }}"
+      - "postgresql-client-{{ postgres__version }}"
+      - python3-psycopg2
+    state: present

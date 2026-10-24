@@ -1,0 +1,13 @@
+---
+- name: install PostgreSQL
+  ansible.builtin.import_tasks: install.yml
+- name: initialize PostgreSQL
+  ansible.builtin.import_tasks: init.yml
+- name: configure PostgreSQL
+  ansible.builtin.import_tasks: config.yml
+- name: configure PostgreSQL service
+  ansible.builtin.import_tasks: service.yml
+- name: create PostgreSQL databases and users
+  ansible.builtin.import_tasks: databases.yml
+- name: configure PostgreSQL exporter
+  ansible.builtin.import_tasks: exporter.yml

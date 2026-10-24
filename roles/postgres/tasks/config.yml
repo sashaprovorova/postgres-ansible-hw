@@ -1,0 +1,17 @@
+---
+- name: configure PostgreSQL settings
+  ansible.builtin.lineinfile:
+    path: "{{postgres__data_dir}}/postgresql.conf"
+    regexp: "^#?\\s*{{item.key|regex_escape}}\\s*="
+    line: "{{item.key}} = {{item.value}}"
+    state: present
+  loop: "{{postgres__opts|dict2items}}"
+  notify: restart PostgreSQL
+- name: configure PostgreSQL authentication
+  ansible.builtin.template:
+    src: pg_hba.conf.j2
+    dest: "{{ postgres__data_dir }}/pg_hba.conf"
+    owner: postgres
+    group: postgres
+    mode: "0600"
+  notify: restart PostgreSQL

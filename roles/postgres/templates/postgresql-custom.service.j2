@@ -1,0 +1,14 @@
+[Unit]
+Description=Custom PostgreSQL Server
+After=network.target
+
+[Service]
+Type=simple
+User=postgres
+Group=postgres
+ExecStart={{__pg_bin_dir}}/postgres -D {{postgres__data_dir}}
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

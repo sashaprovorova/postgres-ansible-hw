@@ -1,0 +1,5 @@
+---
+__pg_version: "{{postgres__version}}"
+__pg_bin_dir: "/usr/lib/postgresql/{{__pg_version}}/bin"
+__pg_service_name: postgresql-custom
+__pg_exporter_service_name: prometheus-postgres-exporter

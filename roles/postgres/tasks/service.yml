@@ -1,0 +1,16 @@
+---
+- name: install custom PostgreSQL systemd service
+  ansible.builtin.template:
+    src: postgresql-custom.service.j2
+    dest: /etc/systemd/system/postgresql-custom.service
+    owner: root
+    group: root
+    mode: "0644"
+  notify: restart PostgreSQL
+
+- name: enable and start PostgreSQL
+  ansible.builtin.systemd:
+    name: postgresql-custom
+    enabled: true
+    state: started
+    daemon_reload: true

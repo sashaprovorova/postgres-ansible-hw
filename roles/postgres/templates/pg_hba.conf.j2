@@ -1,0 +1,9 @@
+# postgreSQL client authentication configuration managed by ansible
+
+{% for rule in postgres__hba_rules %}
+{% if rule.type == 'local' %}
+{{rule.type}} {{rule.database}} {{rule.user}} {{rule.method}}
+{% else %}
+{{rule.type}} {{rule.database}} {{rule.user}} {{rule.address}} {{rule.method}}
+{% endif %}
+{% endfor %}
